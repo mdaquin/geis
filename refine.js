@@ -28,17 +28,38 @@ function update_display(){
     }
     document.getElementById("content").innerHTML=st;
     for (var t in data.rows){
-	(function(t){document.getElementById("delete_"+t).onclick = function () {delete_r(t);}})(t)
+	(function(t){
+	    document.getElementById("delete_"+t).onclick = function () {delete_r(t);}
+	    document.getElementById("dds_"+t).onclick = function () {similar(t);}
+	    document.getElementById("merge1_"+t).onclick = function () {merge(t,document.getElementById('dds_'+t).value);}
+	    document.getElementById("merge2_"+t).onclick = function () {merge(document.getElementById('dds_'+t).value, t);}	    
+	})(t)
     }
 }
 
 function similar(o){
-    // go through all rows and calculate similarities between all labels. Results is max sim by pairs.
-    // return a ranked list
+    if (document.getElementById("dds_"+o).innerHTML!="") return;    
+    console.log("getting similar labels as "+o);
+    var a = [];
+    for (k in data.rows){
+	if (k!=o) a.push([k,ld(k,o)]);
+    }
+    a.sort(function(first, second) {
+	return first[1] - second[1];
+    }, reverse=true);
+    st = "";
+    for(var k in a){
+	st += '<option value="'+a[k][0]+'">'+a[k][0]+'</option>';
+    }
+    document.getElementById("dds_"+o).innerHTML=st;
 }
 
 function merge(o1,o2){
-    // integrate o2 into o1 and remove o2
+    for (var i in data.rows[o2].origins){
+	data.rows[o1].origins.push(data.rows[o2].origins[i]);
+    }
+    delete data.rows[o2];
+    update_display();
 }
 
 function delete_r(k){
@@ -49,4 +70,38 @@ function delete_r(k){
 
 function save(){
     // save as json the all data object
+}
+
+
+function ld(a, b){
+    if(a.length == 0) return b.length; 
+    if(b.length == 0) return a.length; 
+    
+    var matrix = [];
+    
+    // increment along the first column of each row
+    var i;
+    for(i = 0; i <= b.length; i++){
+        matrix[i] = [i];
+    }
+    
+    // increment each column in the first row
+    var j;
+    for(j = 0; j <= a.length; j++){
+        matrix[0][j] = j;
+    }
+    
+    // Fill in the rest of the matrix
+    for(i = 1; i <= b.length; i++){
+        for(j = 1; j <= a.length; j++){
+            if(b.charAt(i-1) == a.charAt(j-1)){
+                matrix[i][j] = matrix[i-1][j-1];
+            } else {
+                matrix[i][j] = Math.min(matrix[i-1][j-1] + 1, // substitution
+                                        Math.min(matrix[i][j-1] + 1, // insertion
+                                                 matrix[i-1][j] + 1)); // deletion
+            }
+        }
+    }   
+    return matrix[b.length][a.length];
 }
