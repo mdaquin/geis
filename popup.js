@@ -1,7 +1,12 @@
-
 var background = chrome.extension.getBackgroundPage();
 
 display();
+
+goahead = document.getElementById("phase1_go_button");
+goahead.onclick = function(element) {
+    chrome.tabs.create({ url: "refine.html" });
+};
+
 
 function display(){
     var st = "";
