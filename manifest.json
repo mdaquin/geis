@@ -8,7 +8,19 @@
 	"persistent": false
     },
     "browser_action": {
-	"default_popup": "popup.html"
+	"default_popup": "popup.html",
+	"default_icon": {
+            "16": "images/geis_icon_16.png",
+            "32": "images/geis_icon_32.png",
+            "48": "images/geis_icon_48.png",
+            "128": "images/geis_icon_128.png"
+	}
+    },
+    "icons": {
+        "16": "images/geis_icon_16.png",
+        "32": "images/geis_icon_32.png",
+        "48": "images/geis_icon_48.png",
+        "128": "images/geis_icon_128.png"
     },
     "manifest_version": 2
 }
