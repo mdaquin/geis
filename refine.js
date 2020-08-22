@@ -2,7 +2,9 @@
 data = {"rows": {}, "deleted": {}};
 
 build_initial();
+
 document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById("save").onclick = function(){save();}
     update_display();
 }, false);
 
@@ -69,7 +71,23 @@ function delete_r(k){
 }
 
 function save(){
-    // save as json the all data object
+    var tosave = JSON.stringify(data);
+    var file = new Blob([tosave], {type: "application.json"});
+    var filename = "geis_"+Date.now()+".json";
+    if (window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(file, filename);
+    } else { 
+        var a = document.createElement("a"),
+            url = URL.createObjectURL(file);
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function() {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);  
+        }, 0); 
+    }
 }
 
 
