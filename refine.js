@@ -1,6 +1,112 @@
 
 data = {"rows": {}, "deleted": {}};
 
+// 100 most common words according to https://github.com/first20hours/google-10000-english/blob/master/google-10000-english-no-swears.txt except for a few which don't feel like stopwords (e.g. search)
+var stopwords = ["it", "what",
+    "the",
+	     "of",
+	     "and",
+	     "to",
+	     "a",
+	     "in",
+	     "for",
+	     "is",
+	     "on",
+	     "that",
+	     "by",
+	     "this",
+	     "with",
+	     "i",
+	     "you",
+	     "it",
+	     "not",
+	     "or",
+	     "be",
+	     "are",
+	     "from",
+	     "at",
+	     "as",
+	     "your",
+	     "all",
+	     "have",
+	     "new",
+	     "more",
+	     "an",
+	     "was",
+	     "we",
+	     "will",
+	     "home",
+	     "can",
+	     "us",
+	     "about",
+	     "if",
+	     "page",
+	     "my",
+	     "has",
+	     "but",
+	     "our",
+	     "one",
+	     "other",
+	     "do",
+	     "no",
+	     "they",
+	     "site",
+	     "he",
+	     "up",
+	     "may",
+	     "what",
+	     "which",
+	     "their",
+	     "news",
+	     "out",
+	     "use",
+	     "any",
+	     "there",
+	     "see",
+	     "only",
+	     "so",
+	     "his",
+	     "when",
+	     "contact",
+	     "here",
+	     "business",
+	     "who",
+	     "web",
+	     "also",
+	     "now",
+	     "help",
+	     "get",
+	     "pm",
+	     "view",
+	     "online",
+	     "c",
+	     "e",
+	     "first",
+	     "am",
+	     "been",
+	     "would",
+	     "how",
+	     "were",
+	     "me",
+	     "s",
+	     "some",
+	     "these",
+	     "its",
+	     "like",
+	     "x",
+	     "than",
+		 "find",
+		 "thus",
+		 "where",
+		 "used",
+		 "thats",
+		 "tailored",
+		 "could",
+		 "achieve",
+		 "into"
+	    ];
+
+
 build_initial();
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -8,6 +114,15 @@ document.addEventListener('DOMContentLoaded', function() {
     update_display();
 }, false);
 
+function removeSW(s){
+    var result = s;
+    for(var x in stopwords){
+	result = result.replace(new RegExp(" "+stopwords[x]+" "), " ").trim();
+	result = result.replace(new RegExp("^"+stopwords[x]+" "), " ").trim();
+	result = result.replace(new RegExp(" "+stopwords[x]+"$"), " ").trim();
+    }
+    return result; 
+}
 
 function build_initial(){
     // build structure with label, total count, origins (count and label there)    
@@ -15,9 +130,10 @@ function build_initial(){
     for (var q in background.snippets){
 	var snippet = background.snippets[q];
 	for (var t in snippet){
-	    if (!data.rows[t]) data.rows[t] = {"total": 0, "origins": []}
-	    data.rows[t].total += snippet[t];
-	    data.rows[t].origins.push({"query": q, "label": t, "count": snippet[t]});
+	    var tt = removeSW(t);
+	    if (!data.rows[tt]) data.rows[tt] = {"total": 0, "origins": []}
+	    data.rows[tt].total += snippet[t];
+	    data.rows[tt].origins.push({"query": q, "label": t, "count": snippet[t]});
 	}
     }
 }
