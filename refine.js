@@ -111,6 +111,7 @@ build_initial();
 
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("save").onclick = function(){save();}
+    document.getElementById("import").onclick = function(){importList();}
     update_display();
 }, false);
 
@@ -145,6 +146,7 @@ function update_display(){
 	st+='<div class="row"><span class="label">'+t+'</span><select class="to_merge" id="dds_'+t+'"></select><span class="clickable" id="merge1_'+t+'">merge keeping this row\'s label</span><span class="clickable" id="merge2_'+t+'">merge keeping the other label</span><span class="clickable" id="delete_'+t+'">delete</span></div>';
     }
     document.getElementById("content").innerHTML=st;
+    document.getElementById("number").innerHTML = Object.keys(data.rows).length+" labels";
     for (var t in data.rows){
 	(function(t){
 	    document.getElementById("delete_"+t).onclick = function () {delete_r(t);}
@@ -238,4 +240,24 @@ function ld(a, b){
         }
     }   
     return matrix[b.length][a.length];
+}
+
+
+function importList(){
+    var e = document.getElementById("fileinput");
+    console.log(e.files[0]);
+    var file = e.files[0];
+    var reader = new FileReader();
+    reader.onload = function(e) {
+	const contents = e.target.result;
+	var labels = contents.split("\n");
+	for(var x in labels){
+	    var l = labels[x].toLowerCase().trim(); 
+	    if (!data.rows[l]) data.rows[l] = {"total": 0, "origins": []}
+	    data.rows[l].total += 1;
+	    data.rows[l].origins.push({"file": file.name, "label": l, "count": 1});
+	}
+	update_display();
+    }
+    reader.readAsText(file);
 }

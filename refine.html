@@ -10,7 +10,12 @@
     </head>
     <script src="refine.js"></script>
     <body>
-      <div class="clickable" id="save" style="font-weight: bold; font-size: 16px">save</div>
+      <div id="panel" style="margin-bottom: 10px; border-bottom: 1px solid #334488; height: 30px;">
+	<input type="file" style="float: left" id="fileinput" />
+	<div class="clickable" id="import" style="margin-right: 30px; float: left;font-weight: bold; font-size: 16px">import from txt list</div>                 
+	<div class="clickable" id="save" style="float: left; font-weight: bold; font-size: 16px">save</div>
+	<div id="number" style="float: left; font-size: 16px; margin-left: 10px; padding: 5px;">0 labels</div>
+      </div><!-- panel -->
       <div id ="content"></div>
     </body>
   </html>
