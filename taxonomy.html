@@ -5,17 +5,19 @@
 	.row{padding: 5px; margin-top: 5px; width: 100%;display: block; overflow: auto;}
 	.label{width: 33%; display: block; float:left;}
 	.to_merge{width: 22%; display: block; float:left;}
-	.clickable{color: #ffffff; margin-left: 5px; float: left; background: #334488; padding: 3px; border-radius: 3px; display: block;}
+	.clickable{color: #ffffff; margin-left: 5px; background: #334488; padding: 3px; border-radius: 3px;}
+	.subconcepts{margin-left: 20px;}
+	.concept_label{margin-top: 5px;}
       </style>
     </head>
-    <script src="refine.js"></script>
+    <script src="bvo.js"></script>
+    <script src="fca.js"></script>
+    <script src="taxonomy.js"></script>    
     <body>
       <div id="panel" style="margin-bottom: 10px; border-bottom: 1px solid #334488; height: 30px;">
 	<input type="file" style="float: left" id="fileinput" />
-	<div class="clickable" id="import" style="margin-right: 30px; float: left;font-weight: bold; font-size: 16px">import from txt list</div>                 
+	<div class="clickable" id="import" style="margin-right: 30px; float: left;font-weight: bold; font-size: 16px">load json</div>                 
 	<div class="clickable" id="save" style="float: left; font-weight: bold; font-size: 16px">save</div>
-	<div id="number" style="float: left; font-size: 16px; margin-left: 10px; padding: 5px;">0 labels</div>
-	<a class="clickable" style="float: right; font-size: 16px; text-decoration: none" href="taxonomy.html">Taxonomise</a>
       </div><!-- panel -->
       <div id ="content"></div>
     </body>
